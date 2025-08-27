@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Bảo Vệ Môi Trường - Web Xanh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        .games-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .games-container {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-icon {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 30px auto 20px;
+        }
+        
+        .game-card.ocean .game-icon {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        
+        .game-card.bottle .game-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .game-card.sorting .game-icon {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .game-card.quiz .game-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .game-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .game-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .game-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+        }
+        
+        .game-features li {
+            padding: 5px 0;
+            color: #27ae60;
+            font-size: 14px;
+        }
+        
+        .game-features li i {
+            margin-right: 8px;
+            width: 16px;
+        }
+        
+        .play-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .play-btn:hover {
+            background: linear-gradient(135deg, #229954, #27ae60);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .play-btn.disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .play-btn.disabled:hover {
+            background: #95a5a6;
+            transform: none;
+        }
+        
+        .difficulty-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .difficulty-easy {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .difficulty-medium {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+        
+        .difficulty-hard {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .stats-section {
+            background: white;
+            padding: 60px 0;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            margin-bottom: 30px;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #27ae60;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .coming-soon {
+            position: relative;
+            opacity: 0.7;
+        }
+        
+        .coming-soon::before {
+            content: "Sắp ra mắt";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        @media (max-width: 768px) {
+            .games-hero {
+                padding: 60px 0;
+            }
+            
+            .game-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            
+            .game-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="games-hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">🎮 Trò Chơi Bảo Vệ Môi Trường</h1>
+            <p class="lead">Học hỏi và bảo vệ môi trường thông qua các trò chơi tương tác thú vị!</p>
+        </div>
+    </section>
+    
+    <!-- Games Section -->
+    <section class="games-container">
+        <div class="container">
+            <div class="row">
+                <!-- Ocean Cleanup Game -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="card game-card ocean position-relative">
+                        <div class="difficulty-badge difficulty-medium">Trung bình</div>
+                        <div class="card-body text-center">
+                            <div class="game-icon">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <h3 class="game-title">Nhặt Rác Thải Dưới Đại Dương</h3>
+                            <p class="game-description">
+                                Lặn xuống đại dương để thu gom rác thải và trả lời câu hỏi về môi trường biển. 
+                                Mỗi lần nhặt rác, bạn sẽ học được kiến thức mới về tác hại của ô nhiễm đại dương.
+                            </p>
+                            <ul class="game-features">
+                                <li><i class="fas fa-check"></i> 6 loại rác thải khác nhau</li>
+                                <li><i class="fas fa-check"></i> 20+ câu hỏi môi trường</li>
+                                <li><i class="fas fa-check"></i> Hệ thống điểm và streak</li>
+                                <li><i class="fas fa-check"></i> Bảng xếp hạng toàn cầu</li>
+                                <li><i class="fas fa-check"></i> Hiệu ứng đại dương 3D</li>
+                            </ul>
+                            <a href="{{ url_for('ocean_cleanup') }}" class="play-btn">
+                                <i class="fas fa-play me-2"></i>Chơi Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottle Collection Game -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="card game-card bottle position-relative">
+                        <div class="difficulty-badge difficulty-easy">Dễ</div>
+                        <div class="card-body text-center">
+                            <div class="game-icon">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                            <h3 class="game-title">Thu Thập Chai Nhựa</h3>
+                            <p class="game-description">
+                                Thử thách tốc độ trong 60 giây! Nhặt càng nhiều chai nhựa càng tốt và cạnh tranh 
+                                với bạn bè trên bảng xếp hạng. Game đơn giản nhưng cực kỳ gây nghiện!
+                            </p>
+                            <ul class="game-features">
+                                <li><i class="fas fa-check"></i> Game 60 giây căng thẳng</li>
+                                <li><i class="fas fa-check"></i> 5 bot AI để cạnh tranh</li>
+                                <li><i class="fas fa-check"></i> Lưu điểm cá nhân</li>
+                                <li><i class="fas fa-check"></i> Bảng xếp hạng real-time</li>
+                                <li><i class="fas fa-check"></i> Hiệu ứng âm thanh sống động</li>
+                            </ul>
+                            <a href="{{ url_for('bottle_game') }}" class="play-btn">
+                                <i class="fas fa-play me-2"></i>Chơi Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Waste Sorting Game -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="card game-card sorting position-relative">
+                        <div class="difficulty-badge difficulty-easy">Dễ</div>
+                        <div class="card-body text-center">
+                            <div class="game-icon">
+                                <i class="fas fa-sort"></i>
+                            </div>
+                            <h3 class="game-title">Phân Loại Rác Thông Minh</h3>
+                            <p class="game-description">
+                                Học cách phân loại rác đúng cách với AI hỗ trợ. Upload ảnh rác thải và 
+                                hệ thống sẽ nhận diện và hướng dẫn bạn bỏ vào thùng rác phù hợp.
+                            </p>
+                            <ul class="game-features">
+                                <li><i class="fas fa-check"></i> AI nhận diện rác thải</li>
+                                <li><i class="fas fa-check"></i> 4 loại thùng rác màu sắc</li>
+                                <li><i class="fas fa-check"></i> Hướng dẫn chi tiết</li>
+                                <li><i class="fas fa-check"></i> Upload ảnh thực tế</li>
+                                <li><i class="fas fa-check"></i> Kiến thức tái chế</li>
+                            </ul>
+                            <a href="{{ url_for('waste_sorting') }}" class="play-btn">
+                                <i class="fas fa-play me-2"></i>Chơi Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Environmental Quiz (Coming Soon) -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="card game-card quiz position-relative coming-soon">
+                        <div class="difficulty-badge difficulty-hard">Khó</div>
+                        <div class="card-body text-center">
+                            <div class="game-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="game-title">Đố Vui Môi Trường</h3>
+                            <p class="game-description">
+                                Thử thách kiến thức môi trường của bạn với hàng trăm câu hỏi từ cơ bản đến nâng cao. 
+                                Thi đấu với người chơi khác trong thời gian thực!
+                            </p>
+                            <ul class="game-features">
+                                <li><i class="fas fa-check"></i> 500+ câu hỏi đa dạng</li>
+                                <li><i class="fas fa-check"></i> Multiplayer real-time</li>
+                                <li><i class="fas fa-check"></i> Xếp hạng toàn cầu</li>
+                                <li><i class="fas fa-check"></i> Chế độ thách đấu</li>
+                                <li><i class="fas fa-check"></i> Phần thưởng hấp dẫn</li>
+                            </ul>
+                            <a href="#" class="play-btn disabled">
+                                <i class="fas fa-clock me-2"></i>Sắp Ra Mắt
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">📊 Thống Kê Cộng Đồng</h2>
+                <p class="text-muted">Cùng nhau bảo vệ môi trường qua con số</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-number" id="total-players">1,234</span>
+                        <div class="stat-label">Người chơi tham gia</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-number" id="waste-collected">15,678</span>
+                        <div class="stat-label">Rác thải đã thu gom</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-number" id="questions-answered">8,945</span>
+                        <div class="stat-label">Câu hỏi đã trả lời</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card">
+                        <span class="stat-number" id="co2-saved">2.5</span>
+                        <div class="stat-label">Tấn CO₂ đã tiết kiệm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Navigation -->
+    <div class="container mt-5 mb-5">
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg me-3">
+                <i class="fas fa-home me-2"></i>Về Trang Chủ
+            </a>
+            <a href="{{ url_for('leaderboard') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-trophy me-2"></i>Bảng Xếp Hạng
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animate numbers on page load
+        function animateNumber(elementId, targetNumber, duration = 2000) {
+            const element = document.getElementById(elementId);
+            const startNumber = 0;
+            const increment = targetNumber / (duration / 16);
+            let currentNumber = startNumber;
+            
+            const timer = setInterval(() => {
+                currentNumber += increment;
+                if (currentNumber >= targetNumber) {
+                    currentNumber = targetNumber;
+                    clearInterval(timer);
+                }
+                
+                if (elementId === 'co2-saved') {
+                    element.textContent = currentNumber.toFixed(1);
+                } else {
+                    element.textContent = Math.floor(currentNumber).toLocaleString();
+                }
+            }, 16);
+        }
+        
+        // Start animations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate loading stats (in real app, fetch from API)
+            setTimeout(() => {
+                animateNumber('total-players', 1234);
+                animateNumber('waste-collected', 15678);
+                animateNumber('questions-answered', 8945);
+                animateNumber('co2-saved', 2.5);
+            }, 500);
+        });
+        
+        // Add hover effects to game cards
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (!card.classList.contains('coming-soon')) {
+                    card.style.transform = 'translateY(-10px) scale(1.02)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
+

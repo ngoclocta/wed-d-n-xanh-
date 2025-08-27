@@ -1,0 +1,93 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.hero-section {
+    height: 60vh;
+    background: url('/static/images/hero_background.jpg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.hero-section h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5rem;
+}
+
+.pollution-impact-section .card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pollution-impact-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pollution-impact-section .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-success {
+    background-color: #2E7D32;
+    border-color: #2E7D32;
+}
+
+.btn-success:hover {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.modal-header.bg-success {
+    background-color: #2E7D32 !important;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.solution-option {
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solution-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.solution-option i {
+    color: #2E7D32; /* Default icon color */
+}
+
+.solution-option:nth-child(1) i { color: #2E7D32; } /* Waste Sorting */
+.solution-option:nth-child(2) i { color: #1976D2; } /* Bottle Collection */
+.solution-option:nth-child(3) i { color: #D32F2F; } /* Plastic Bag Reduction */
+.solution-option:nth-child(4) i { color: #4CAF50; } /* AI Consultant */
+
+footer {
+    background-color: #333;
+    color: white;
+}
+
+
