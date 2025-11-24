@@ -1,0 +1,8 @@
+a = int(input('number one: '))
+#nuoc tang luc number one
+b = int(input('number two: '))
+
+print("cong:",a+b)
+print("tru:",a-b)
+print("nhan:",a*b)
+print("chia:",a/b)
