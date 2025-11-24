@@ -1,0 +1,15 @@
+a = float(input("diem: "))
+
+if a < 0 :
+    print("uia:diem so khong the am duoc tru khi ban qua ngu :)")
+if  a > 10:
+    print("uia:boc phet it thoi")
+else:
+    if a >= 8:
+        print("Gioi")
+    elif a >= 6.5:
+        print("Kha")
+    elif a >= 5:
+        print("Trung binh")
+    else:
+        print("yeu")
